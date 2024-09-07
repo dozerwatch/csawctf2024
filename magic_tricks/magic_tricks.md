@@ -39,18 +39,45 @@ Enter data:
 The hexdump of `output.txt` is:
 
 ```
-0000000 a8c2 88c3 a2c2 90c3 a8c2 89c3 afc2 98c3
-0000010 89c3 6a71 a0c2 87c3 8ac3 bfc2 4a6a a0c2
-0000020 c362 6a87 a0c2 7150 c248 c2a0 48b8 92c3
-0000030 a0c2 c250 c280 c3a0 c289 48b1 a0c2 4170
-0000040 81c3 b1c2 c348 4a87 a0c2 bac2 5262 6842
-0000050 9ac3                                   
-0000052
+00000000  c2 a8 c3 88 c2 a2 c3 90  c2 a8 c3 89 c2 af c3 98  |................|
+00000010  c3 89 71 6a c2 a0 c3 87  c3 8a c2 bf 6a 4a c2 a0  |..qj........jJ..|
+00000020  62 c3 87 6a c2 a0 50 71  48 c2 a0 c2 b8 48 c3 92  |b..j..PqH....H..|
+00000030  c2 a0 50 c2 80 c2 a0 c3  89 c2 b1 48 c2 a0 70 41  |..P........H..pA|
+00000040  c3 81 c2 b1 48 c3 87 4a  c2 a0 c2 ba 62 52 42 68  |....H..J....bRBh|
+00000050  c3 9a                                             |..|
+00000052
 ```
 
 After entering data, the output is given in `output.txt`. So make sure to make a copy of content of the original `output.txt`.
 
-My first thought was that `output.txt` is the flag encoded using "magic". I tested this theory by inputing "csawctf{}" as the data.
+My first thought was that `output.txt` is the flag encoded using "magic". I tested this theory by inputing "csawctf{}" as the data. The resulting hexdump:
 
+```
+00000000  c2 a8 c3 88 c2 a2 c3 90  c2 a8 c3 89 c2 af c3 98  |................|
+00000010  c3 9a                                             |..|
+00000012
+```
+
+We see the first line and last line match the original output.txt. Knowing the flag consists of alphanumeric characters, we can make a dictionary mapping each character to its encoded data. We do this with pwntools.
+
+```
+from pwn import *
+from time import sleep
+
+d = {}
+
+with context.quiet:
+    for i in range(33,126):
+        p = process("./chall")
+        p.send(p8(i)+b"\n")
+        p.clean()
+        sleep(1)
+        f = open("output.txt", "rb")
+        s = f.read()
+        d[s] = p8(i)
+        print(f"{p8(i)} = {s}")
+```
+
+After many trials, I found that opening `output.txt` too quickly results in faulty encoding. Sleeping for 1 second fixes that, but I do not know why. Now that we have the encoding for every alphanumeric character, we can decode the original output and get the flag. I did this by hand. Some characters had two byte encodings and some had one. All two byte encodings began with `c2` or `c3`.
 
 
