@@ -11,6 +11,32 @@ author: jp
 
 ---
 
+Running the `chall` gives the following output:
+
+```
+
+          _____________
+          |           |
+          |           |
+          |           |
+      ____|___________|____
+        ,_---~~~~~----._
+  _,,_,*^____      _____\˴ᐠ*g*\"*,
+ / __/ /'     ^.  /      \ ^@q   f
+[  @f | @))    |  | @))   l  0 _/
+ \ᐠ/   \~____ / __ \_____/    \
+  |           _l__l_           I
+  }          [______]           I
+  ]            | | |            |
+  ]             ~ ~             |
+  |                            |
+   |                           |
+For my magic trick...
+Enter any data you want and I put it into my mysterious black box and you get out stuff into a file (wow magic)
+Enter data:
+```
+
+After entering data, the output is given in output.txt.
 
 
 
