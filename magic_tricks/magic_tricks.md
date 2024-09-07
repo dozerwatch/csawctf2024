@@ -58,9 +58,9 @@ My first thought was that `output.txt` is the flag encoded using "magic". I test
 00000012
 ```
 
-We see the first line and last line match the original output.txt. Knowing the flag consists of alphanumeric characters, we can make a dictionary mapping each character to its encoded data. We do this with pwntools.
+We see the first line and last line match the original `output.txt`. Knowing the flag consists of alphanumeric characters, I made a dictionary mapping each character to its encoded data.
 
-```
+```py
 from pwn import *
 from time import sleep
 
@@ -78,6 +78,8 @@ with context.quiet:
         print(f"{p8(i)} = {s}")
 ```
 
-After many trials, I found that opening `output.txt` too quickly results in faulty encoding. Sleeping for 1 second fixes that, but I do not know why. Now that we have the encoding for every alphanumeric character, we can decode the original output and get the flag. I did this by hand. Some characters had two byte encodings and some had one. All two byte encodings began with `c2` or `c3`.
+After many trials, I found that opening `output.txt` too quickly results in faulty encoding. Sleeping for 1 second fixed that, but I do not know why. Now we have the encoding for every alphanumeric character. Decode the original output and get the flag. I did this by hand. 
 
+Some characters have two byte encodings and some have one. All two byte encodings begin with `c2` or `c3`.
 
+Flag: `csawctf{}`
